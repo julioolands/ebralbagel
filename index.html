@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ébral — Sistema de Identidad de Marca</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cobalt: #1D3BAF;
+    --cobalt-deep: #152D8F;
+    --cobalt-light: #2E4EC4;
+    --cobalt-pale: #E8EDF9;
+    --ivory: #F5F1E8;
+    --ivory-warm: #EDE8DC;
+    --ivory-deep: #E0D9CC;
+    --white: #FAFAF8;
+    --stone: #C8BFB0;
+    --charcoal: #1A1A18;
+    --text-dark: #1A1A18;
+    --text-mid: #4A4A46;
+    --text-light: #8A8A84;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --mono: 'DM Mono', monospace;
+    --space-sm: 16px;
+    --space-md: 32px;
+    --space-lg: 64px;
+    --space-xl: 120px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--ivory); color: var(--text-dark); -webkit-font-smoothing: antialiased; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--ivory); border-bottom: 1px solid var(--ivory-deep);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 var(--space-lg); height: 60px;
+  }
+  .nav-brand { font-family: var(--serif); font-size: 22px; font-weight: 400; color: var(--cobalt); letter-spacing: -0.02em; }
+  .nav-links { display: flex; gap: 24px; list-style: none; }
+  .nav-links a { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--cobalt); }
+  .nav-meta { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--text-light); text-transform: uppercase; }
+
+  /* SECTIONS */
+  section { padding: var(--space-xl) var(--space-lg); max-width: 1400px; margin: 0 auto; }
+  section.full-bleed { max-width: none; padding: 0; }
+  .section-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cobalt); margin-bottom: var(--space-md); display: flex; align-items: center; gap: 12px; }
+  .section-label::after { content: ''; display: block; height: 1px; background: var(--cobalt); opacity: 0.2; max-width: 60px; flex: 1; }
+  .section-number { opacity: 0.4; margin-right: 2px; }
+
+  /* HERO */
+  .hero { padding-top: 160px; padding-bottom: var(--space-xl); min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); align-items: center; max-width: 1400px; margin: 0 auto; padding-left: var(--space-lg); padding-right: var(--space-lg); }
+  .hero-wordmark { font-family: var(--serif); font-size: clamp(88px, 13vw, 168px); font-weight: 400; color: var(--cobalt); line-height: 0.88; letter-spacing: -0.03em; margin-bottom: 20px; animation: fadeUp 0.9s ease both; }
+  .hero-tagline { font-family: var(--sans); font-size: 11px; font-weight: 400; letter-spacing: 0.26em; text-transform: uppercase; color: var(--text-mid); margin-bottom: var(--space-lg); animation: fadeUp 0.9s 0.15s ease both; }
+  .hero-description { font-family: var(--serif); font-size: 21px; font-weight: 300; font-style: italic; color: var(--text-mid); line-height: 1.65; max-width: 420px; border-left: 2px solid var(--cobalt); padding-left: var(--space-sm); animation: fadeUp 0.9s 0.3s ease both; }
+  .hero-meta { display: flex; gap: var(--space-lg); margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--ivory-deep); animation: fadeUp 0.9s 0.45s ease both; }
+  .hero-meta-value { font-family: var(--serif); font-size: 28px; font-weight: 400; color: var(--cobalt); display: block; }
+  .hero-meta-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-light); }
+  .hero-right { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; animation: fadeUp 0.9s 0.2s ease both; }
+  .hero-img { border-radius: 3px; overflow: hidden; background: var(--cobalt-pale); }
+  .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* MANIFESTO */
+  .manifesto-wrap { background: var(--cobalt); padding: var(--space-xl) var(--space-lg); }
+  .manifesto-inner { max-width: 960px; margin: 0 auto; }
+  .manifesto-wrap .section-label { color: rgba(255,255,255,0.4); }
+  .manifesto-wrap .section-label::after { background: rgba(255,255,255,0.15); }
+  .manifesto-text { font-family: var(--serif); font-size: clamp(24px, 3.6vw, 48px); font-weight: 300; line-height: 1.48; color: var(--ivory); letter-spacing: -0.01em; }
+  .manifesto-text em { font-style: italic; color: rgba(255,255,255,0.55); }
+  .manifesto-pillars { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--space-md); margin-top: var(--space-xl); padding-top: var(--space-lg); border-top: 1px solid rgba(255,255,255,0.12); }
+  .manifesto-pillar-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 8px; }
+  .manifesto-pillar-value { font-family: var(--serif); font-size: 18px; font-weight: 400; color: var(--ivory); }
+
+  /* CARDS */
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-md); margin-top: var(--space-lg); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-top: var(--space-lg); }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--space-md); margin-top: var(--space-lg); }
+  .card { padding: var(--space-md); border: 1px solid var(--ivory-deep); border-radius: 4px; background: var(--white); }
+  .card-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cobalt); margin-bottom: 12px; }
+  .card-title { font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--text-dark); line-height: 1.2; margin-bottom: 10px; }
+  .card-body { font-family: var(--sans); font-size: 13px; line-height: 1.75; color: var(--text-mid); font-weight: 300; }
+
+  /* COLOR */
+  .color-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 10px; margin-top: var(--space-lg); }
+  .color-card { border-radius: 4px; overflow: hidden; border: 1px solid var(--ivory-deep); }
+  .color-swatch { height: 200px; }
+  .color-card.primary .color-swatch { background: var(--cobalt); height: 300px; }
+  .color-card.c-ivory .color-swatch { background: var(--ivory); }
+  .color-card.c-white .color-swatch { background: var(--white); border-bottom: 1px solid var(--ivory-deep); }
+  .color-card.c-stone .color-swatch { background: var(--stone); }
+  .color-card.c-charcoal .color-swatch { background: var(--charcoal); }
+  .color-info { padding: 16px; background: var(--white); }
+  .color-name { font-family: var(--serif); font-size: 17px; font-weight: 400; color: var(--text-dark); display: block; margin-bottom: 3px; }
+  .color-hex { font-family: var(--mono); font-size: 10px; color: var(--text-light); display: block; margin-bottom: 2px; }
+  .color-role { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cobalt); opacity: 0.55; display: block; }
+  .color-combos { margin-top: var(--space-lg); display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+  .combo { padding: var(--space-md); border-radius: 4px; border: 1px solid var(--ivory-deep); }
+  .combo.dark { background: var(--cobalt); border-color: transparent; }
+  .combo-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-light); margin-bottom: 12px; }
+  .combo.dark .combo-label { color: rgba(255,255,255,0.35); }
+  .combo-sample { font-family: var(--serif); font-size: 36px; font-weight: 400; }
+  .combo.light .combo-sample { color: var(--cobalt); }
+  .combo.dark .combo-sample { color: var(--ivory); }
+  .combo-desc { font-family: var(--sans); font-size: 12px; line-height: 1.65; font-weight: 300; margin-top: 8px; }
+  .combo.light .combo-desc { color: var(--text-mid); }
+  .combo.dark .combo-desc { color: rgba(255,255,255,0.55); }
+
+  /* TIPOGRAFIA */
+  .type-system { margin-top: var(--space-lg); }
+  .type-row { padding: var(--space-lg) 0; border-bottom: 1px solid var(--ivory-deep); display: grid; grid-template-columns: 200px 1fr; gap: var(--space-lg); align-items: start; }
+  .type-meta-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cobalt); display: block; margin-bottom: 6px; }
+  .type-detail { font-family: var(--mono); font-size: 10px; color: var(--text-light); display: block; margin-bottom: 3px; }
+  .type-use { font-family: var(--sans); font-size: 11px; color: var(--text-mid); font-weight: 300; line-height: 1.55; margin-top: 10px; }
+  .t-display { font-family: var(--serif); font-size: clamp(52px,8vw,104px); font-weight: 400; color: var(--cobalt); line-height: 0.9; letter-spacing: -0.02em; }
+  .t-italic { font-family: var(--serif); font-size: clamp(36px,5vw,72px); font-weight: 300; font-style: italic; color: var(--text-dark); line-height: 1.15; }
+  .t-heading { font-family: var(--serif); font-size: clamp(22px,3vw,38px); font-weight: 400; color: var(--text-dark); line-height: 1.25; }
+  .t-label { font-family: var(--sans); font-size: 12px; font-weight: 400; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-mid); }
+  .t-body { font-family: var(--sans); font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--text-mid); max-width: 560px; }
+  .t-mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; color: var(--text-mid); }
+  .pairing-demo { margin-top: var(--space-xl); padding: var(--space-lg); background: var(--white); border: 1px solid var(--ivory-deep); border-radius: 4px; text-align: center; }
+  .pairing-label-top { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cobalt); margin-bottom: var(--space-md); }
+  .pairing-word { font-family: var(--serif); font-size: 80px; font-weight: 400; color: var(--cobalt); line-height: 1; letter-spacing: -0.02em; }
+  .pairing-tag { font-family: var(--sans); font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--cobalt); margin-top: 8px; }
+
+  /* LOGO */
+  .logo-grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-top: var(--space-lg); }
+  .logo-card { border-radius: 4px; overflow: hidden; border: 1px solid var(--ivory-deep); }
+  .logo-field { padding: 60px var(--space-lg); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px; }
+  .logo-field.on-ivory { background: var(--ivory); }
+  .logo-field.on-cobalt { background: var(--cobalt); }
+  .logo-field.on-white { background: var(--white); }
+  .logo-field.on-dark { background: var(--charcoal); }
+  .logo-w { font-family: var(--serif); font-size: 58px; font-weight: 400; line-height: 1; letter-spacing: -0.02em; display: block; }
+  .logo-t { font-family: var(--sans); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; display: block; margin-top: 7px; }
+  .on-ivory .logo-w, .on-ivory .logo-t, .on-white .logo-w, .on-white .logo-t { color: var(--cobalt); }
+  .on-cobalt .logo-w, .on-cobalt .logo-t, .on-dark .logo-w, .on-dark .logo-t { color: var(--ivory); }
+  .logo-cap { padding: 14px var(--space-md); background: var(--white); border-top: 1px solid var(--ivory-deep); font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); }
+  .logo-rules { margin-top: var(--space-lg); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-md); }
+
+  /* VOZ */
+  .voice-table { margin-top: var(--space-lg); border-radius: 4px; overflow: hidden; border: 1px solid var(--ivory-deep); }
+  .voice-table-head { display: grid; grid-template-columns: 1fr 1fr; background: var(--ivory-deep); }
+  .voice-table-head div { padding: 12px var(--space-md); font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mid); }
+  .voice-row { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--ivory-deep); }
+  .voice-cell { padding: 14px var(--space-md); font-family: var(--sans); font-size: 13px; line-height: 1.6; font-weight: 300; }
+  .voice-cell.si { background: var(--white); color: var(--text-dark); border-right: 1px solid var(--ivory-deep); }
+  .voice-cell.no { background: var(--ivory); color: var(--text-light); text-decoration: line-through; text-decoration-color: rgba(0,0,0,0.18); }
+
+  /* APPS */
+  .apps-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-md); margin-top: var(--space-lg); }
+  .app-card { border-radius: 4px; overflow: hidden; border: 1px solid var(--ivory-deep); background: var(--white); }
+  .app-visual { height: 230px; background: var(--ivory); display: flex; align-items: center; justify-content: center; }
+  .app-visual.bg-cobalt { background: var(--cobalt); }
+  .app-visual.bg-dark { background: var(--charcoal); }
+  .app-info { padding: 16px var(--space-md); border-top: 1px solid var(--ivory-deep); }
+  .app-title { font-family: var(--serif); font-size: 18px; font-weight: 400; color: var(--text-dark); margin-bottom: 4px; }
+  .app-desc { font-family: var(--sans); font-size: 12px; color: var(--text-light); font-weight: 300; line-height: 1.55; }
+  .cup { width: 78px; height: 98px; background: var(--white); border-radius: 4px 4px 8px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 8px 40px rgba(0,0,0,0.12); position: relative; }
+  .cup::after { content:''; position:absolute; bottom:0; left:0; right:0; height:26px; background:var(--cobalt); border-radius: 0 0 6px 6px; }
+  .cup span { font-family:var(--serif); font-size:14px; color:var(--cobalt); z-index:1; }
+  .bag { width:88px; height:108px; background:var(--ivory); border:1px solid var(--stone); border-radius:4px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; box-shadow:0 8px 40px rgba(0,0,0,0.1); }
+  .bag .bl { font-family:var(--serif); font-size:16px; color:var(--cobalt); }
+  .bag .bt { font-family:var(--mono); font-size:7px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-light); }
+  .tote { width:80px; height:88px; background:var(--cobalt); border-radius:4px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; box-shadow:0 8px 40px rgba(0,0,0,0.15); }
+  .tote .tl { font-family:var(--serif); font-size:16px; color:var(--ivory); }
+  .tote .tt { font-family:var(--mono); font-size:7px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.4); }
+  .menu-mock-app { width:98px; height:128px; background:var(--white); border:1px solid var(--ivory-deep); border-radius:3px; padding:14px 10px; box-shadow:0 8px 40px rgba(0,0,0,0.1); }
+  .menu-mock-app .mb { font-family:var(--serif); font-size:14px; color:var(--cobalt); margin-bottom:6px; }
+  .menu-mock-app .mi { font-family:var(--sans); font-size:8px; color:var(--text-mid); border-bottom:1px solid var(--ivory-deep); padding:3px 0; display:flex; justify-content:space-between; font-weight:300; }
+  .apron { width:88px; height:108px; background:var(--cobalt); clip-path:polygon(20% 0%,80% 0%,90% 5%,100% 100%,0% 100%,10% 5%); display:flex; align-items:center; justify-content:center; padding-top:20px; box-shadow:0 8px 40px rgba(0,0,0,0.15); }
+  .apron span { font-family:var(--serif); font-size:13px; color:var(--ivory); }
+  .bcard { width:130px; height:80px; background:var(--cobalt); border-radius:6px; display:flex; flex-direction:column; justify-content:space-between; padding:14px 16px; box-shadow:0 8px 40px rgba(0,0,0,0.2); }
+  .bcard .bcl { font-family:var(--serif); font-size:18px; color:var(--ivory); }
+  .bcard .bcm { font-family:var(--mono); font-size:7px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.35); }
+
+  /* SENSORIAL */
+  .sense-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-top: var(--space-lg); }
+  .sense-card { padding: var(--space-md); border: 1px solid var(--ivory-deep); border-radius: 4px; background: var(--white); }
+  .sense-icon { font-family: var(--serif); font-size: 34px; color: var(--cobalt); opacity: 0.35; margin-bottom: 12px; }
+  .sense-title { font-family: var(--serif); font-size: 22px; font-weight: 400; color: var(--text-dark); margin-bottom: 8px; }
+  .sense-body { font-family: var(--sans); font-size: 13px; line-height: 1.75; color: var(--text-mid); font-weight: 300; }
+  .sense-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .sense-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cobalt); background: var(--cobalt-pale); padding: 4px 10px; border-radius: 2px; }
+
+  /* ═══════════════════════════════════
+     MENÚ — SISTEMA COMPLETO
+  ═══════════════════════════════════ */
+  .menu-intro {
+    font-family: var(--serif); font-size: 22px; font-weight: 300; font-style: italic;
+    color: var(--text-mid); line-height: 1.65; max-width: 680px;
+    margin-bottom: var(--space-lg); border-left: 2px solid var(--cobalt); padding-left: var(--space-sm);
+  }
+
+  /* Categoría header */
+  .menu-section {
+    margin-bottom: var(--space-lg);
+  }
+
+  .menu-section-header {
+    display: flex; align-items: baseline; gap: var(--space-sm);
+    margin-bottom: var(--space-md); padding-bottom: 14px;
+    border-bottom: 2px solid var(--cobalt);
+  }
+
+  .menu-section-name {
+    font-family: var(--serif); font-size: 36px; font-weight: 400; color: var(--cobalt); line-height: 1;
+  }
+
+  .menu-section-sub {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--text-light);
+  }
+
+  /* Grid de bagels */
+  .bagels-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+
+  .bagel-card {
+    background: var(--white); border: 1px solid var(--ivory-deep); border-radius: 4px;
+    padding: var(--space-sm) var(--space-md); display: flex; justify-content: space-between; align-items: start; gap: var(--space-sm);
+    transition: border-color 0.2s;
+  }
+
+  .bagel-card:hover { border-color: var(--cobalt); }
+
+  .bagel-card.signature {
+    border-color: var(--cobalt); background: var(--cobalt-pale);
+  }
+
+  .bagel-left { flex: 1; }
+
+  .bagel-name {
+    font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text-dark);
+    line-height: 1.1; margin-bottom: 5px;
+  }
+
+  .bagel-card.signature .bagel-name { color: var(--cobalt); }
+
+  .bagel-desc {
+    font-family: var(--sans); font-size: 12px; color: var(--text-mid); font-weight: 300;
+    line-height: 1.55;
+  }
+
+  .bagel-tags { display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
+
+  .bagel-tag {
+    font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-light); background: var(--ivory-deep); padding: 2px 7px; border-radius: 2px;
+  }
+
+  .bagel-card.signature .bagel-tag { background: rgba(29,59,175,0.12); color: var(--cobalt); }
+
+  .bagel-price {
+    font-family: var(--mono); font-size: 13px; color: var(--cobalt); white-space: nowrap;
+    font-weight: 400; padding-top: 3px;
+  }
+
+  .bagel-star {
+    font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--cobalt); margin-bottom: 4px;
+  }
+
+  /* Items lineales — para café y extras */
+  .line-items { display: flex; flex-direction: column; gap: 0; }
+
+  .line-item {
+    display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: var(--space-sm);
+    padding: 13px 0; border-bottom: 1px solid var(--ivory-deep);
+  }
+  .line-item:last-child { border-bottom: none; }
+
+  .line-item-name { font-family: var(--serif); font-size: 17px; font-weight: 400; color: var(--text-dark); }
+  .line-item-desc { font-family: var(--sans); font-size: 11px; color: var(--text-light); font-weight: 300; margin-top: 2px; }
+  .line-item-price { font-family: var(--mono); font-size: 12px; color: var(--cobalt); white-space: nowrap; }
+
+  /* Dos columnas para café y bebidas */
+  .cafe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+
+  /* Nota de base de bagel */
+  .bagel-base-note {
+    background: var(--white); border: 1px solid var(--ivory-deep); border-radius: 4px;
+    padding: 14px var(--space-md); margin-top: 12px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .bagel-base-note-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cobalt); white-space: nowrap; }
+  .bagel-base-note-text { font-family: var(--sans); font-size: 12px; color: var(--text-mid); font-weight: 300; line-height: 1.5; }
+
+  /* INTERIOR */
+  .interior-grid { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-md); margin-top: var(--space-lg); }
+  .interior-img { border-radius: 4px; overflow: hidden; }
+  .interior-img img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 420px; }
+  .interior-specs { display: flex; flex-direction: column; gap: 10px; }
+  .ispec { padding: 14px; background: var(--white); border: 1px solid var(--ivory-deep); border-radius: 4px; }
+  .ispec-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cobalt); margin-bottom: 5px; }
+  .ispec-value { font-family: var(--serif); font-size: 14px; font-weight: 400; color: var(--text-dark); line-height: 1.45; }
+
+  /* PERSONALIDAD */
+  .positioning-block { margin-top: var(--space-lg); padding: var(--space-lg); background: var(--white); border: 1px solid var(--ivory-deep); border-radius: 4px; border-left: 3px solid var(--cobalt); }
+  .positioning-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cobalt); margin-bottom: 14px; }
+  .positioning-text { font-family: var(--serif); font-size: 26px; font-weight: 300; line-height: 1.55; color: var(--text-dark); }
+  .positioning-text strong { font-weight: 500; color: var(--cobalt); }
+  .spectrums { padding: var(--space-md); background: var(--white); border: 1px solid var(--ivory-deep); border-radius: 4px; }
+  .spec-label-top { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-light); margin-bottom: var(--space-md); }
+  .spec-row { display: grid; grid-template-columns: 110px 1fr 110px; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .spec-end { font-family: var(--sans); font-size: 12px; color: var(--text-light); font-weight: 300; }
+  .spec-end.r { text-align: right; }
+  .spec-track { height: 2px; background: var(--ivory-deep); border-radius: 2px; position: relative; }
+  .spec-fill { position: absolute; left: 0; top: 0; height: 100%; background: var(--cobalt); border-radius: 2px; }
+  .spec-dot { position: absolute; top: 50%; transform: translate(-50%,-50%); width: 10px; height: 10px; background: var(--cobalt); border-radius: 50%; border: 2px solid var(--white); box-shadow: 0 0 0 1px var(--cobalt); }
+
+  /* FRASES */
+  .phrases-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-md); margin-top: var(--space-lg); }
+  .phrase-card { padding: var(--space-md); border: 1px solid var(--ivory-deep); border-radius: 4px; background: var(--white); display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; }
+  .phrase-text { font-family: var(--serif); font-size: 22px; font-weight: 300; font-style: italic; color: var(--text-dark); line-height: 1.4; }
+  .phrase-use { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cobalt); opacity: 0.5; margin-top: 16px; }
+
+  /* UNIVERSO */
+  .universe-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--space-md); margin-top: var(--space-lg); }
+  .universe-card { padding: var(--space-md); border: 1px solid var(--ivory-deep); border-radius: 4px; background: var(--white); transition: border-color 0.3s, transform 0.3s; cursor: default; }
+  .universe-card:hover { border-color: var(--cobalt); transform: translateY(-4px); }
+  .universe-phase { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cobalt); opacity: 0.45; margin-bottom: 10px; }
+  .universe-title { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text-dark); margin-bottom: 8px; }
+  .universe-body { font-family: var(--sans); font-size: 12px; line-height: 1.65; color: var(--text-mid); font-weight: 300; }
+
+  /* FOOTER */
+  footer { background: var(--cobalt); padding: var(--space-lg); margin-top: var(--space-xl); }
+  .footer-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); align-items: center; }
+  .footer-brand { font-family: var(--serif); font-size: 52px; font-weight: 400; color: var(--ivory); display: block; margin-bottom: 6px; }
+  .footer-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+  .footer-meta { text-align: right; }
+  .footer-credit { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); display: block; margin-bottom: 4px; }
+  .footer-studio { font-family: var(--serif); font-size: 16px; color: rgba(255,255,255,0.55); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 960px) {
+    nav { padding: 0 var(--space-md); }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding-top: 110px; }
+    .hero-right { display: none; }
+    section { padding: var(--space-lg) var(--space-md); }
+    .grid-3, .grid-4, .logo-rules, .phrases-grid, .universe-grid { grid-template-columns: 1fr 1fr; }
+    .color-grid { grid-template-columns: 1fr 1fr; }
+    .manifesto-pillars { grid-template-columns: 1fr 1fr; }
+    .apps-grid { grid-template-columns: 1fr 1fr; }
+    .bagels-grid { grid-template-columns: 1fr; }
+    .cafe-grid { grid-template-columns: 1fr; }
+    .interior-grid { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-meta { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-brand">ébral</span>
+  <ul class="nav-links">
+    <li><a href="#fundamento">Fundamento</a></li>
+    <li><a href="#manifiesto">Manifiesto</a></li>
+    <li><a href="#color">Color</a></li>
+    <li><a href="#tipografia">Tipografía</a></li>
+    <li><a href="#logo">Logo</a></li>
+    <li><a href="#personalidad">Personalidad</a></li>
+    <li><a href="#voz">Voz</a></li>
+    <li><a href="#aplicaciones">Aplicaciones</a></li>
+    <li><a href="#experiencia">Experiencia</a></li>
+    <li><a href="#menu">Menú</a></li>
+    <li><a href="#interior">Interior</a></li>
+    <li><a href="#universo">Universo</a></li>
+  </ul>
+  <span class="nav-meta">Sistema de Identidad · 2025</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-wordmark">ébral</div>
+    <div class="hero-tagline">All Day Rituals</div>
+    <p class="hero-description">
+      No vendemos café ni bagels.<br>
+      Vendemos el lujo de bajar el ritmo.
+    </p>
+    <div class="hero-meta">
+      <div><span class="hero-meta-value">13</span><span class="hero-meta-label">Secciones</span></div>
+      <div><span class="hero-meta-value">2025</span><span class="hero-meta-label">Landfall Studio</span></div>
+      <div><span class="hero-meta-value">Sinaloa</span><span class="hero-meta-label">México</span></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img" style="height:500px; grid-row:span 2;">
+      <img src="ebral-fachada.png" alt="ébral fachada Mazatlán" />
+    </div>
+    <div class="hero-img" style="height:244px;">
+      <img src="ebral-pattern.png" alt="ébral patrón tipográfico" />
+    </div>
+  </div>
+</div>
+
+<!-- 01 FUNDAMENTO -->
+<section id="fundamento">
+  <div class="section-label"><span class="section-number">01</span> Fundamento de Marca</div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-label">El Concepto</div>
+      <div class="card-title">Una bagel house premium contemporánea.</div>
+      <p class="card-body">ébral es un concepto especializado en bagels de desayuno contemporáneos, brunch all day y café de especialidad. No es una cafetería. No es una bakery clásica. Es un espacio ritual — abundante, cálido, indulgente y estéticamente sofisticado.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">La Misión</div>
+      <div class="card-title">El lugar perfecto para desayunar lento y volver.</div>
+      <p class="card-body">En una cultura de aceleración, ébral crea espacios deliberados donde el bagel es protagonista absoluto y el tiempo se habita de otra manera. Somos el tercer lugar entre tu casa y tu trabajo — pero con más mantequilla.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">La Promesa</div>
+      <div class="card-title">Este lugar me hace sentir bien.</div>
+      <p class="card-body">La gente no regresa por el café. Regresa por cómo se siente en ébral. Esa pertenencia emocional — esa sensación silenciosa de hogar con comfort food elevado — es el producto que diseñamos todos los días.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 02 MANIFIESTO -->
+<section id="manifiesto" class="full-bleed">
+  <div class="manifesto-wrap">
+    <div class="manifesto-inner">
+      <div class="section-label"><span class="section-number">02</span> Manifiesto de Marca</div>
+      <p class="manifesto-text">
+        Hay lugares donde solo consumes.<br>
+        <em>Y hay lugares donde perteneces.</em><br><br>
+        ébral nace de la idea de recuperar el tiempo:<br>
+        desayunos largos, conversaciones honestas,<br>
+        <em>café servido con intención</em><br>
+        y comida hecha para disfrutarse sin prisa.<br><br>
+        Inspirado en la calma del azul cobalto<br>
+        y en la belleza de los rituales cotidianos,<br>
+        <em>creamos un espacio donde diseño,<br>sabor y emoción conviven naturalmente.</em><br><br>
+        Aquí, el brunch dura todo el día<br>
+        porque creemos que los mejores momentos<br>
+        <em>no deberían tener horario.</em><br><br>
+        Bienvenido a tu ritual favorito.
+      </p>
+      <div class="manifesto-pillars">
+        <div><div class="manifesto-pillar-label">Territorio</div><div class="manifesto-pillar-value">Quiet Luxury</div></div>
+        <div><div class="manifesto-pillar-label">Filosofía</div><div class="manifesto-pillar-value">Slow Living</div></div>
+        <div><div class="manifesto-pillar-label">Formato</div><div class="manifesto-pillar-value">Bagel House Premium</div></div>
+        <div><div class="manifesto-pillar-label">Expresión Central</div><div class="manifesto-pillar-value">ALL DAY RITUALS</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 COLOR -->
+<section id="color">
+  <div class="section-label"><span class="section-number">03</span> Sistema de Color</div>
+  <div class="color-grid">
+    <div class="color-card primary"><div class="color-swatch"></div><div class="color-info"><span class="color-name">ébral Cobalto</span><span class="color-hex">#1D3BAF · R29 G59 B175</span><span class="color-hex">Pantone 2728 C (referencia)</span><span class="color-role">Primario · Insignia</span></div></div>
+    <div class="color-card c-ivory"><div class="color-swatch"></div><div class="color-info"><span class="color-name">Marfil</span><span class="color-hex">#F5F1E8</span><span class="color-role">Fondo Primario</span></div></div>
+    <div class="color-card c-white"><div class="color-swatch"></div><div class="color-info"><span class="color-name">Blanco Hueso</span><span class="color-hex">#FAFAF8</span><span class="color-role">Fondo Secundario</span></div></div>
+    <div class="color-card c-stone"><div class="color-swatch"></div><div class="color-info"><span class="color-name">Piedra</span><span class="color-hex">#C8BFB0</span><span class="color-role">Acento Neutro</span></div></div>
+    <div class="color-card c-charcoal"><div class="color-swatch"></div><div class="color-info"><span class="color-name">Carbón</span><span class="color-hex">#1A1A18</span><span class="color-role">Texto · Modo oscuro</span></div></div>
+  </div>
+  <div class="color-combos">
+    <div class="combo light"><div class="combo-label">Expresión Principal — Claro</div><div class="combo-sample">ébral</div><p class="combo-desc">Cobalto sobre marfil. La expresión de marca por defecto. Packaging, vasos, servilletas, menús y todo material impreso en contexto primario.</p></div>
+    <div class="combo dark"><div class="combo-label">Expresión Principal — Invertida</div><div class="combo-sample">ébral</div><p class="combo-desc">Marfil sobre cobalto. Delantales, azulejos de barra, señalética y contextos digitales que requieren mayor presencia visual.</p></div>
+  </div>
+</section>
+
+<!-- 04 TIPOGRAFIA -->
+<section id="tipografia">
+  <div class="section-label"><span class="section-number">04</span> Sistema Tipográfico</div>
+  <div class="type-system">
+    <div class="type-row"><div><span class="type-meta-label">Display Serif</span><span class="type-detail">Cormorant Garamond · Peso 400</span><p class="type-use">Wordmark, titulares hero, momentos principales de marca. El wordmark siempre en minúsculas.</p></div><div class="t-display">ébral</div></div>
+    <div class="type-row"><div><span class="type-meta-label">Display Itálica</span><span class="type-detail">Cormorant Garamond · Peso 300 Italic</span><p class="type-use">Manifiesto, citas editoriales, copy emocional. Calidez y movimiento.</p></div><div class="t-italic">Un ritual al que quieres volver.</div></div>
+    <div class="type-row"><div><span class="type-meta-label">Encabezado</span><span class="type-detail">Cormorant Garamond · Peso 400</span><p class="type-use">Categorías de menú, títulos de sección, señalética interior.</p></div><div class="t-heading">Bagels de la Casa</div></div>
+    <div class="type-row"><div><span class="type-meta-label">Etiqueta / UI</span><span class="type-detail">DM Sans · Peso 400 · Espaciado amplio</span><p class="type-use">Taglines, etiquetas, navegación. "ALL DAY RITUALS" siempre en este estilo.</p></div><div class="t-label">ALL DAY RITUALS</div></div>
+    <div class="type-row"><div><span class="type-meta-label">Cuerpo de Texto</span><span class="type-detail">DM Sans · Peso 300</span><p class="type-use">Descripciones, copy de menú, texto editorial, packaging, cuerpo digital.</p></div><div class="t-body">Creemos en la mañana lenta. En el segundo café. En las conversaciones que no terminan cuando llega la cuenta. ébral existe para quienes entienden que el tiempo, cuando se elige con cuidado, es el lujo definitivo.</p></div></div>
+    <div class="type-row"><div><span class="type-meta-label">Metadatos</span><span class="type-detail">DM Mono · Peso 300–400</span><p class="type-use">Precios, códigos, etiquetas técnicas, notas al pie.</p></div><div class="t-mono">01 · Sistema de Identidad · Landfall Studio · Sinaloa · 2025</div></div>
+  </div>
+  <div class="pairing-demo">
+    <div class="pairing-label-top">Combinación Canónica — Wordmark con Tagline</div>
+    <div class="pairing-word">ébral</div>
+    <div class="pairing-tag">ALL DAY RITUALS</div>
+  </div>
+</section>
+
+<!-- 05 LOGO -->
+<section id="logo">
+  <div class="section-label"><span class="section-number">05</span> Sistema de Logo</div>
+  <div class="logo-grid-4">
+    <div class="logo-card"><div class="logo-field on-ivory"><div style="text-align:center;"><span class="logo-w">ébral</span><span class="logo-t">ALL DAY RITUALS</span></div></div><div class="logo-cap">Principal — Cobalto sobre Marfil</div></div>
+    <div class="logo-card"><div class="logo-field on-cobalt"><div style="text-align:center;"><span class="logo-w">ébral</span><span class="logo-t">ALL DAY RITUALS</span></div></div><div class="logo-cap">Invertida — Marfil sobre Cobalto</div></div>
+    <div class="logo-card"><div class="logo-field on-white"><div style="text-align:center;"><span class="logo-w" style="font-size:80px;">ébral</span></div></div><div class="logo-cap">Wordmark Solo — Versión Reducida</div></div>
+    <div class="logo-card"><div class="logo-field on-dark"><div style="text-align:center;"><span class="logo-w">ébral</span><span class="logo-t">ALL DAY RITUALS</span></div></div><div class="logo-cap">Modo Oscuro — Sobre Carbón</div></div>
+  </div>
+  <div class="logo-rules">
+    <div class="card"><div class="card-label">Espacio de Respeto</div><p class="card-body">Mantener siempre un espacio libre mínimo equivalente a la altura del carácter "é" en todos los lados del wordmark. Nunca saturar el logo con otros elementos.</p></div>
+    <div class="card"><div class="card-label">Combinaciones Aprobadas</div><p class="card-body">Cobalto sobre Marfil. Cobalto sobre Blanco Hueso. Marfil sobre Cobalto. Marfil sobre Carbón. Nunca aplicar el logo fuera de la paleta oficial.</p></div>
+    <div class="card"><div class="card-label">Lo que Nunca Cambia</div><p class="card-body">La "é" con acento es innegociable. El wordmark siempre en minúsculas. "ALL DAY RITUALS" siempre en mayúsculas con tracking amplio. Nunca alterar proporciones ni espaciado.</p></div>
+  </div>
+</section>
+
+<!-- 06 PERSONALIDAD -->
+<section id="personalidad">
+  <div class="section-label"><span class="section-number">06</span> Personalidad de Marca</div>
+  <div class="positioning-block">
+    <div class="positioning-label">Declaración de Posicionamiento</div>
+    <p class="positioning-text">ébral es la <strong>bagel house premium contemporánea</strong> para personas que entienden que las mejores mañanas no se apresuran. Construida para la <strong>pertenencia emocional y el vivir con intención</strong>, ébral combina comfort food elevado, café de especialidad y quiet luxury en <strong>un mundo sensorial al que vale la pena regresar todos los días.</strong></p>
+  </div>
+  <div class="grid-2" style="margin-top:var(--space-lg);">
+    <div class="spectrums">
+      <div class="spec-label-top">Espectros de Carácter</div>
+      <div class="spec-row"><span class="spec-end">Exclusivo</span><div class="spec-track"><div class="spec-fill" style="width:38%"></div><div class="spec-dot" style="left:38%"></div></div><span class="spec-end r">Cercano</span></div>
+      <div class="spec-row"><span class="spec-end">Refinado</span><div class="spec-track"><div class="spec-fill" style="width:42%"></div><div class="spec-dot" style="left:42%"></div></div><span class="spec-end r">Comfort</span></div>
+      <div class="spec-row"><span class="spec-end">Minimalista</span><div class="spec-track"><div class="spec-fill" style="width:35%"></div><div class="spec-dot" style="left:35%"></div></div><span class="spec-end r">Indulgente</span></div>
+      <div class="spec-row"><span class="spec-end">Calmado</span><div class="spec-track"><div class="spec-fill" style="width:20%"></div><div class="spec-dot" style="left:20%"></div></div><span class="spec-end r">Enérgico</span></div>
+      <div class="spec-row"><span class="spec-end">Editorial</span><div class="spec-track"><div class="spec-fill" style="width:44%"></div><div class="spec-dot" style="left:44%"></div></div><span class="spec-end r">Antojable</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="card"><div class="card-label">ébral Es</div><p class="card-body" style="line-height:2.1;">Calmada · Elegante · Emocionalmente inteligente<br>Comfort food elevado · Antojable · Indulgente<br>Aspiracional sin arrogancia<br>Exclusiva pero nunca fría<br>Minimalista pero nunca vacía</p></div>
+      <div class="card"><div class="card-label">ébral Nunca Es</div><p class="card-body" style="line-height:2.1;color:var(--text-light);">Deli tradicional · Bakery clásica<br>Cafetería hipster · Trendy para redes<br>Ruidosa · Saturada visualmente<br>Neones · Mentalidad de fast food<br>Fine dining · Estética tropical</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 VOZ -->
+<section id="voz">
+  <div class="section-label"><span class="section-number">07</span> Voz y Tono</div>
+  <div class="grid-2">
+    <div class="card"><div class="card-label">La Voz</div><div class="card-title">Inteligencia en calma.</div><p class="card-body">ébral habla con confianza silenciosa. Nunca grita. Nunca se esfuerza demasiado. La marca sabe lo que es y comunica desde esa certeza. Como una persona en quien confiarías inmediatamente — no porque sea ruidosa, sino porque es segura.</p></div>
+    <div class="card"><div class="card-label">El Tono</div><div class="card-title">Cálido y editorial.</div><p class="card-body">Las frases son cortas e intencionales. Usamos la itálica serif para momentos emocionales. El silencio — el espacio blanco, las pausas — es una herramienta de comunicación. Escribimos como se siente el espacio: curado, sin prisa, humano.</p></div>
+  </div>
+  <div class="voice-table">
+    <div class="voice-table-head"><div>ébral Escribe</div><div>ébral Nunca Escribe</div></div>
+    <div class="voice-row"><div class="voice-cell si">La mañana comienza aquí.</div><div class="voice-cell no">¡Empieza tu día con nuestro INCREÍBLE menú de desayunos!</div></div>
+    <div class="voice-row"><div class="voice-cell si">Un ritual en cada taza.</div><div class="voice-cell no">El mejor café de la ciudad, ¡garantizado! 😍</div></div>
+    <div class="voice-row"><div class="voice-cell si">Tómate tu tiempo. Guardamos la mesa.</div><div class="voice-cell no">¡Ven este fin de semana y aprovecha nuestra promoción de brunch!</div></div>
+    <div class="voice-row"><div class="voice-cell si">El bagel que no olvidarás. Sin exagerar.</div><div class="voice-cell no">¡Nuestros bagels son los más ricos de toda la ciudad! 🔥</div></div>
+    <div class="voice-row"><div class="voice-cell si">Hecho con calma. Pensado para durar.</div><div class="voice-cell no">¡Combo especial solo por hoy — no te lo pierdas!</div></div>
+    <div class="voice-row"><div class="voice-cell si">Conoces la sensación. Construimos un lugar para ella.</div><div class="voice-cell no">¡Síguenos para contenido diario e inspiración! ✨</div></div>
+  </div>
+</section>
+
+<!-- 08 APLICACIONES -->
+<section id="aplicaciones">
+  <div class="section-label"><span class="section-number">08</span> Aplicaciones de Marca</div>
+  <div class="apps-grid">
+    <div class="app-card"><div class="app-visual"><div class="cup"><span>ébral</span></div></div><div class="app-info"><div class="app-title">Vasos y Sleeves</div><p class="app-desc">Sleeve cobalto sobre vaso marfil. Logo centrado, tagline debajo. Aplica a formatos fríos y calientes. El sleeve es el principal touchpoint táctil de marca.</p></div></div>
+    <div class="app-card"><div class="app-visual bg-cobalt"><div class="apron"><span>ébral</span></div></div><div class="app-info"><div class="app-title">Uniformes</div><p class="app-desc">Delantal cobalto sobre camisa de lino blanco. Logo bordado o impreso al pecho. Limpio, editorial, hospitalidad contemporánea.</p></div></div>
+    <div class="app-card"><div class="app-visual"><div class="menu-mock-app"><div class="mb">ébral</div><div class="mi"><span>El Matutino</span><span>145</span></div><div class="mi"><span>La Calma</span><span>160</span></div><div class="mi"><span>El Ritual</span><span>175</span></div><div class="mi"><span>Flat White</span><span>72</span></div></div></div><div class="app-info"><div class="app-title">Menú</div><p class="app-desc">Fondo marfil, wordmark cobalto, Cormorant Garamond para nombres, DM Mono para precios. Bagels con nombre propio. Descripción de ingredientes en una línea.</p></div></div>
+    <div class="app-card"><div class="app-visual" style="padding:0;overflow:hidden;"><img src="ebral-packaging.png" alt="ébral packaging lineup" style="width:100%;height:100%;object-fit:cover;display:block;" /></div><div class="app-info"><div class="app-title">Packaging</div><p class="app-desc">Kraft natural, sleeve cobalto "ALL DAY RITUALS", caja blanca y servilletas con patrón tipográfico. Sistema completo y coherente.</p></div></div>
+    <div class="app-card"><div class="app-visual bg-cobalt"><div class="tote"><span class="tl">ébral</span><span class="tt">ALL DAY RITUALS</span></div></div><div class="app-info"><div class="app-title">Objetos Retail</div><p class="app-desc">Tote bags, cerámica, libretas. Lona cobalto o stock marfil. Objetos que extienden el ritual ébral a la vida cotidiana del cliente.</p></div></div>
+    <div class="app-card"><div class="app-visual bg-dark"><div class="bcard"><span class="bcl">ébral</span><span class="bcm">ALL DAY RITUALS</span></div></div><div class="app-info"><div class="app-title">Digital y Redes Sociales</div><p class="app-desc">Cobalto sobre oscuro para contextos digital-first. Layout mínimo. Contenido liderado por fotografía de bagels — protagonista visual absoluto.</p></div></div>
+  </div>
+</section>
+
+<!-- 09 EXPERIENCIA SENSORIAL -->
+<section id="experiencia">
+  <div class="section-label"><span class="section-number">09</span> Mundo Sensorial</div>
+  <div class="sense-grid">
+    <div class="sense-card"><div class="sense-icon">♪</div><div class="sense-title">Sonido</div><p class="sense-body">El playlist de ébral vive entre jazz minimal, soft electronica y piano contemporáneo. Nunca intrusivo, nunca muzak de fondo. Música que notas cuando quieres, y desaparece cuando no. Referentes: Nils Frahm, Khruangbin, Arooj Aftab, Bill Evans.</p><div class="sense-tags"><span class="sense-tag">50–65 BPM</span><span class="sense-tag">Instrumental primero</span><span class="sense-tag">Sin letras en horas pico</span></div></div>
+    <div class="sense-card"><div class="sense-icon">◎</div><div class="sense-title">Aroma Signature</div><p class="sense-body">El espacio debe oler a pan recién horneado, café de especialidad y madera de roble cálida. Sin aromatizantes sintéticos. El aroma se construye a través de los ingredientes reales: masa fermentada, café tostado en el momento, madera, lino.</p><div class="sense-tags"><span class="sense-tag">Pan + café como base</span><span class="sense-tag">Notas maderosas</span><span class="sense-tag">Sin fragancia artificial</span></div></div>
+    <div class="sense-card"><div class="sense-icon">◻</div><div class="sense-title">Ritual de Servicio</div><p class="sense-body">El staff saluda recordando, no recitando. El bagel llega presentado con intención — no tirado en un plato. La cuenta llega solo cuando se solicita. El servicio es atento sin ser intrusivo. La experiencia completa debe sentirse como hospitalidad contemporánea, no fast casual.</p><div class="sense-tags"><span class="sense-tag">Intencional</span><span class="sense-tag">Sin prisa</span><span class="sense-tag">Humano</span><span class="sense-tag">Presentación cuidada</span></div></div>
+    <div class="sense-card"><div class="sense-icon">⬜</div><div class="sense-title">Luz y Atmósfera</div><p class="sense-body">Luz natural en la mañana, tungsteno cálido en la tarde. Sin fluorescentes. Pendants sobre la barra, velas en mesa al atardecer. La luz cambia con el día — la mañana es nítida y energizante, la tarde es suave y dorada.</p><div class="sense-tags"><span class="sense-tag">Luz natural matutina</span><span class="sense-tag">2700K cálido vespertino</span><span class="sense-tag">Sin LED frío</span></div></div>
+  </div>
+
+  <!-- IMAGEN EDITORIAL: mesa ébral -->
+  <div style="margin-top:var(--space-lg); border-radius:4px; overflow:hidden; border:1px solid var(--ivory-deep);">
+    <img src="ebral-mesa.png" alt="ébral — mesa editorial, La Calma" style="width:100%; display:block; max-height:600px; object-fit:cover; object-position:center top;" />
+    <div style="padding:14px var(--space-md); background:var(--white); display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-family:var(--serif); font-size:18px; font-weight:400; color:var(--text-dark);">La Calma — salmón ahumado, crema de eneldo, alcaparras</span>
+      <span style="font-family:var(--mono); font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-light);">Referencia de presentación · ébral</span>
+    </div>
+  </div>
+</section>
+
+<!-- 10 MENÚ -->
+<section id="menu">
+  <div class="section-label"><span class="section-number">10</span> Sistema de Menú</div>
+
+  <p class="menu-intro">
+    Los bagels de ébral no son deli ni bakery tradicional.<br>
+    Son desayuno contemporáneo: abundante, cálido, indulgente<br>
+    y visualmente sofisticado. El bagel es el protagonista absoluto.
+  </p>
+
+  <!-- BASE NOTE -->
+  <div class="bagel-base-note">
+    <span class="bagel-base-note-label">Base de Bagel</span>
+    <span class="bagel-base-note-text">Todos los bagels se elaboran con masa madre de fermentación lenta, hervidos en agua con miel y horneados al momento. Disponibles en: plain, ajonjolí, everything, malta y poppy seed. Todos los bagels se sirven tostados.</span>
+  </div>
+
+  <!-- CATEGORÍA 1: BAGELS CLÁSICOS -->
+  <div class="menu-section" style="margin-top:var(--space-lg);">
+    <div class="menu-section-header">
+      <span class="menu-section-name">Clásicos</span>
+      <span class="menu-section-sub">Los rituales de siempre, elevados</span>
+    </div>
+    <div class="bagels-grid">
+      <div class="bagel-card signature">
+        <div class="bagel-left">
+          <div class="bagel-star">★ Firma de la casa</div>
+          <div class="bagel-name">El Matutino</div>
+          <div class="bagel-desc">Huevo tibio, queso crema de la casa, aguacate aplastado, everything seasoning, aceite de oliva, flor de sal</div>
+          <div class="bagel-tags"><span class="bagel-tag">Vegetariano</span><span class="bagel-tag">Signature</span></div>
+        </div>
+        <div class="bagel-price">145</div>
+      </div>
+      <div class="bagel-card">
+        <div class="bagel-left">
+          <div class="bagel-name">La Calma</div>
+          <div class="bagel-desc">Salmón ahumado, queso crema de eneldo, alcaparras, cebolla morada encurtida, limón</div>
+          <div class="bagel-tags"><span class="bagel-tag">Sin gluten disponible</span></div>
+        </div>
+        <div class="bagel-price">175</div>
+      </div>
+      <div class="bagel-card">
+        <div class="bagel-left">
+          <div class="bagel-name">El Clásico</div>
+          <div class="bagel-desc">Queso crema natural, mantequilla de la casa, mermelada de temporada, miel de abeja</div>
+          <div class="bagel-tags"><span class="bagel-tag">Vegetariano</span></div>
+        </div>
+        <div class="bagel-price">95</div>
+      </div>
+      <div class="bagel-card">
+        <div class="bagel-left">
+          <div class="bagel-name">El Suave</div>
+          <div class="bagel-desc">Ricotta fresca, higo en almíbar, nuez tostada, ralladura de limón, miel de abeja oscura</div>
+          <div class="bagel-tags"><span class="bagel-tag">Vegetariano</span><span class="bagel-tag">Dulce-salado</span></div>
+        </div>
+        <div class="bagel-price">130</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORÍA 2: BAGELS ESPECIALES -->
+  <div class="menu-section">
+    <div class="menu-section-header">
+      <span class="menu-section-name">Especiales</span>
+      <span class="menu-section-sub">Comfort food en su máxima expresión</span>
+    </div>
+    <div class="bagels-grid">
+      <div class="bagel-card signature">
+        <div class="bagel-left">
+          <div class="bagel-star">★ Más pedido</div>
+          <div class="bagel-name">El Ritual</div>
+          <div class="bagel-desc">Brisket deshebrado 12 horas, cheddar fundido, huevo revuelto suave, cebolla caramelizada, salsa de la casa</div>
+          <div class="bagel-tags"><span class="bagel-tag">Carne</span><span class="bagel-tag">Indulgente</span></div>
+        </div>
+        <div class="bagel-price">190</div>
+      </div>
+      <div class="bagel-card">
+        <div class="bagel-left">
+          <div class="bagel-name">La Trufa</div>
+          <div class="bagel-desc">Huevo revuelto con aceite de trufa negra, parmesano rallado, champiñones salteados, cebollín</div>
+          <div class="bagel-tags"><span class="bagel-tag">Vegetariano</span><span class="bagel-tag">Premium</span></div>
+        </div>
+        <div class="bagel-price">180</div>
+      </div>
+      <div class="bagel-card">
+        <div class="bagel-left">
+          <div class="bagel-name">El Sur</div>
+          <div class="bagel-desc">Pollo crispy buttermilk, coleslaw de col morada, salsa picante de la casa, pepinillo, miel de jalapeño</div>
+          <div class="bagel-tags"><span class="bagel-tag">Carne</span><span class="bagel-tag">Spicy</span></div>
+        </div>
+        <div class="bagel-price">175</div>
+      </div>
+      <div class="bagel-card">
+        <div class="bagel-left">
+          <div class="bagel-name">La Burrata</div>
+          <div class="bagel-desc">Burrata fresca, jitomate asado lento, pesto de albahaca, flor de sal, aceite de oliva extra virgen</div>
+          <div class="bagel-tags"><span class="bagel-tag">Vegetariano</span><span class="bagel-tag">Fresco</span></div>
+        </div>
+        <div class="bagel-price">165</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORÍA 3: BAGELS DE TEMPORADA -->
+  <div class="menu-section">
+    <div class="menu-section-header">
+      <span class="menu-section-name">De Temporada</span>
+      <span class="menu-section-sub">Rotación mensual — siempre algo nuevo</span>
+    </div>
+    <div class="bagels-grid">
+      <div class="bagel-card">
+        <div class="bagel-left">
+          <div class="bagel-name">El Visitante</div>
+          <div class="bagel-desc">Combinación especial del mes — ingredientes de temporada local, concepto nuevo cada cuatro semanas</div>
+          <div class="bagel-tags"><span class="bagel-tag">Temporada</span><span class="bagel-tag">Limitado</span></div>
+        </div>
+        <div class="bagel-price">desde 160</div>
+      </div>
+      <div class="bagel-card">
+        <div class="bagel-left">
+          <div class="bagel-name">El Colaborador</div>
+          <div class="bagel-desc">Creación en colaboración con un productor o chef invitado — rotación trimestral con historia editorial</div>
+          <div class="bagel-tags"><span class="bagel-tag">Colaboración</span><span class="bagel-tag">Edición especial</span></div>
+        </div>
+        <div class="bagel-price">desde 175</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORÍA 4: CAFÉ DE ESPECIALIDAD -->
+  <div class="menu-section">
+    <div class="menu-section-header">
+      <span class="menu-section-name">Café de Especialidad</span>
+      <span class="menu-section-sub">Origen único · Extracción con intención</span>
+    </div>
+    <div class="cafe-grid">
+      <div class="line-items">
+        <div class="line-item"><div><div class="line-item-name">Espresso</div><div class="line-item-desc">origen único, tueste medio-oscuro</div></div><span class="line-item-price">55</span></div>
+        <div class="line-item"><div><div class="line-item-name">Cortado</div><div class="line-item-desc">doble espresso, leche vaporizada 1:1</div></div><span class="line-item-price">65</span></div>
+        <div class="line-item"><div><div class="line-item-name">Flat White</div><div class="line-item-desc">doble ristretto, leche entera</div></div><span class="line-item-price">72</span></div>
+        <div class="line-item"><div><div class="line-item-name">Latte</div><div class="line-item-desc">espresso, leche vaporizada, microespuma</div></div><span class="line-item-price">72</span></div>
+        <div class="line-item"><div><div class="line-item-name">Cappuccino</div><div class="line-item-desc">espresso, leche, espuma densa</div></div><span class="line-item-price">68</span></div>
+        <div class="line-item"><div><div class="line-item-name">Americano</div><div class="line-item-desc">doble espresso, agua caliente</div></div><span class="line-item-price">58</span></div>
+      </div>
+      <div class="line-items">
+        <div class="line-item"><div><div class="line-item-name">Cold Brew</div><div class="line-item-desc">extracción 18 horas, solo o con leche</div></div><span class="line-item-price">80</span></div>
+        <div class="line-item"><div><div class="line-item-name">Cold Brew Tónica</div><div class="line-item-desc">cold brew, agua tónica, naranja</div></div><span class="line-item-price">88</span></div>
+        <div class="line-item"><div><div class="line-item-name">Latte de Matcha</div><div class="line-item-desc">matcha ceremonial, leche de avena</div></div><span class="line-item-price">78</span></div>
+        <div class="line-item"><div><div class="line-item-name">Latte de Lavanda</div><div class="line-item-desc">lavanda, vainilla, leche de almendra</div></div><span class="line-item-price">80</span></div>
+        <div class="line-item"><div><div class="line-item-name">Café de Filtro</div><div class="line-item-desc">pour-over, origen del día, 250 ml</div></div><span class="line-item-price">65</span></div>
+        <div class="line-item"><div><div class="line-item-name">Café de la Casa</div><div class="line-item-desc">mezcla ébral, notas a chocolate y nuez</div></div><span class="line-item-price">55</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORÍA 5: BEBIDAS Y EXTRAS -->
+  <div class="menu-section">
+    <div class="menu-section-header">
+      <span class="menu-section-name">Bebidas y Extras</span>
+      <span class="menu-section-sub">Para completar el ritual</span>
+    </div>
+    <div class="cafe-grid">
+      <div class="line-items">
+        <div class="line-item"><div><div class="line-item-name">Agua Mineral</div><div class="line-item-desc">natural o con gas, 500 ml</div></div><span class="line-item-price">35</span></div>
+        <div class="line-item"><div><div class="line-item-name">Jugo Prensado</div><div class="line-item-desc">cold-pressed, selección de temporada</div></div><span class="line-item-price">75</span></div>
+        <div class="line-item"><div><div class="line-item-name">Té de Especialidad</div><div class="line-item-desc">selección de tés de origen, servicio en tetera</div></div><span class="line-item-price">60</span></div>
+        <div class="line-item"><div><div class="line-item-name">Agua de Jamaica</div><div class="line-item-desc">flores de jamaica, sin azúcar añadida</div></div><span class="line-item-price">45</span></div>
+      </div>
+      <div class="line-items">
+        <div class="line-item"><div><div class="line-item-name">Pan de la Casa</div><div class="line-item-desc">selección del día, mantequilla artesanal</div></div><span class="line-item-price">55</span></div>
+        <div class="line-item"><div><div class="line-item-name">Bowl ébral</div><div class="line-item-desc">yogurt, granola de la casa, fruta, miel</div></div><span class="line-item-price">115</span></div>
+        <div class="line-item"><div><div class="line-item-name">Extra Queso Crema</div><div class="line-item-desc">natural, eneldo o chipotle</div></div><span class="line-item-price">20</span></div>
+        <div class="line-item"><div><div class="line-item-name">Extra Proteína</div><div class="line-item-desc">huevo adicional, aguacate o salmón</div></div><span class="line-item-price">30–45</span></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- 11 INTERIOR -->
+<section id="interior">
+  <div class="section-label"><span class="section-number">11</span> Dirección de Interior</div>
+  <div class="interior-grid">
+    <div class="interior-img"><img src="IMG_1340.png" alt="ébral interior render" /></div>
+    <div class="interior-specs">
+      <div class="ispec"><div class="ispec-label">Material de Barra</div><div class="ispec-value">Mármol Calacatta — blanco con vetas grises cálidas</div></div>
+      <div class="ispec"><div class="ispec-label">Azulejo Acento</div><div class="ispec-value">Azulejo cobalto, formato vertical, frente de barra</div></div>
+      <div class="ispec"><div class="ispec-label">Madera</div><div class="ispec-value">Roble claro — paneles de listones, repisas, bases</div></div>
+      <div class="ispec"><div class="ispec-label">Metal</div><div class="ispec-value">Acero inoxidable cepillado — equipo de barra, luminarias pendant</div></div>
+      <div class="ispec"><div class="ispec-label">Techo</div><div class="ispec-value">Concreto expuesto o blanco alto — nunca plafón acústico</div></div>
+      <div class="ispec"><div class="ispec-label">Mobiliario</div><div class="ispec-value">Tapizado en lino marfil cálido — formas redondas, sin aristas</div></div>
+      <div class="ispec"><div class="ispec-label">Señalética</div><div class="ispec-value">Letras tridimensionales en pared — acero cepillado o acabado cobalto</div></div>
+      <div class="ispec"><div class="ispec-label">Evitar</div><div class="ispec-value" style="color:var(--text-light);">Neones · Madera oscura · Plantas tropicales · Hierro negro industrial</div></div>
+    </div>
+  </div>
+
+  <!-- FACHADA MAZATLÁN -->
+  <div style="margin-top:var(--space-lg); border-radius:4px; overflow:hidden; border:1px solid var(--ivory-deep);">
+    <img src="ebral-fachada.png" alt="ébral fachada Centro Histórico Mazatlán" style="width:100%; display:block; max-height:560px; object-fit:cover; object-position:center 20%;" />
+    <div style="padding:14px var(--space-md); background:var(--white); display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-family:var(--serif); font-size:18px; font-weight:400; color:var(--text-dark);">Fachada — Centro Histórico, Mazatlán</span>
+      <span style="font-family:var(--mono); font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-light);">Referencia de ubicación · Arquitectura colonial</span>
+    </div>
+  </div>
+</section>
+
+<!-- 12 FRASES -->
+<section id="frases">
+  <div class="section-label"><span class="section-number">12</span> Frases de Marca</div>
+  <p style="font-family:var(--sans);font-size:13px;color:var(--text-mid);font-weight:300;max-width:600px;line-height:1.75;margin-bottom:var(--space-lg);">El universo verbal de ébral se expande alrededor de ideas emocionales y filosóficas que refuerzan el territorio de slow living y pertenencia. Estas frases se usan en señalética, redes sociales, packaging y comunicación de marca.</p>
+  <div class="phrases-grid">
+    <div class="phrase-card"><div class="phrase-text">"el lujo de regresar a ti."</div><div class="phrase-use">Español · Manifiesto · Señalética</div></div>
+    <div class="phrase-card"><div class="phrase-text">"the luxury of slowing down."</div><div class="phrase-use">Inglés · Digital · Packaging</div></div>
+    <div class="phrase-card"><div class="phrase-text">"a ritual you return to."</div><div class="phrase-use">Inglés · Hero Copy · Redes</div></div>
+    <div class="phrase-card"><div class="phrase-text">"where mornings stay longer."</div><div class="phrase-use">Inglés · Señalética interior</div></div>
+    <div class="phrase-card"><div class="phrase-text">"un espacio para habitar el tiempo de otra manera."</div><div class="phrase-use">Español · Editorial · Menú</div></div>
+    <div class="phrase-card"><div class="phrase-text">"designed to stay."</div><div class="phrase-use">Inglés · Tarjetas · Empaque</div></div>
+  </div>
+</section>
+
+<!-- PATRÓN TIPOGRÁFICO -->
+<div style="overflow:hidden; max-height:340px;">
+  <img src="ebral-pattern.png" alt="ébral patrón tipográfico" style="width:100%; display:block; object-fit:cover; object-position:center;" />
+</div>
+
+<!-- 13 UNIVERSO -->
+<section id="universo">
+  <div class="section-label"><span class="section-number">13</span> Universo de Marca — Expansión</div>
+  <p style="font-family:var(--sans);font-size:13px;color:var(--text-mid);font-weight:300;max-width:600px;line-height:1.75;margin-bottom:var(--space-lg);">ébral no es una cafetería. Es el inicio de un mundo emocional y sensorial completo. La marca está diseñada desde el principio para escalar de manera coherente a través de producto, hospitalidad, retail y cultura.</p>
+  <div class="universe-grid">
+    <div class="universe-card"><div class="universe-phase">Fase 01 · Ahora</div><div class="universe-title">ébral House</div><p class="universe-body">La bagel house premium original en Culiacán o Mazatlán. El espacio ritual fundacional. Todas las decisiones de marca aquí definen el universo.</p></div>
+    <div class="universe-card"><div class="universe-phase">Fase 02 · Año 2</div><div class="universe-title">ébral Tostador</div><p class="universe-body">Tostado de café de especialidad bajo la etiqueta ébral. Venta de grano entero en retail. El café como objeto de marca.</p></div>
+    <div class="universe-card"><div class="universe-phase">Fase 02 · Año 2</div><div class="universe-title">ébral Objetos</div><p class="universe-body">Cerámica, libretas, tote bags, velas. Objetos que llevan el ritual ébral al hogar del cliente.</p></div>
+    <div class="universe-card"><div class="universe-phase">Fase 03 · Año 3</div><div class="universe-title">ébral Bakery</div><p class="universe-body">Bagels y productos horneados en retail. Kits artesanales. Mermeladas y untables de la casa. La cocina como línea de producto.</p></div>
+    <div class="universe-card"><div class="universe-phase">Fase 03 · Año 3</div><div class="universe-title">ébral Fragancia</div><p class="universe-body">El aroma del espacio — en frasco. Spray para ambientes, vela, fragancia personal. El ritual, portátil.</p></div>
+    <div class="universe-card"><div class="universe-phase">Fase 04 · Año 4</div><div class="universe-title">ébral Club</div><p class="universe-body">Experiencia para miembros. Horario matutino privado, programación curada, lugares reservados. La pertenencia como producto.</p></div>
+    <div class="universe-card"><div class="universe-phase">Fase 04 · Año 4</div><div class="universe-title">ébral Hoteles</div><p class="universe-body">Hospitalidad boutique donde el ritual ébral se extiende a una experiencia nocturna. La mañana como arquitectura.</p></div>
+    <div class="universe-card"><div class="universe-phase">Fase 05 · Año 5+</div><div class="universe-title">ébral Editorial</div><p class="universe-body">Publicación de temporada impresa y digital. Fotografía, ensayos, recetas. La cultura como expresión de marca.</p></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <span class="footer-brand">ébral</span>
+      <span class="footer-tag">All Day Rituals · Sistema de Identidad de Marca</span>
+    </div>
+    <div class="footer-meta">
+      <span class="footer-credit">Identidad de Marca por</span>
+      <span class="footer-studio">Landfall Studio · Culiacán, Sinaloa · 2025</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
